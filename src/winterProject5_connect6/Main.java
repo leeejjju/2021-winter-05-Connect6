@@ -32,7 +32,6 @@ public class Main extends JFrame{
 	 public void paint(Graphics g) {
 	      super.paint(g);
 	      System.out.println("선긋는중...");
-	      //g.setColor(Color.BLACK);
 
 			for(int i = 0; i < 19; i ++) {
 				
@@ -53,14 +52,7 @@ public class Main extends JFrame{
 		}
 	
 	
-	//돌 하나 놔두는..거엿으면 좋겟다 
-	public static void PUT(Graphics g) {
-		if(put) {
-			g.fillOval(PlayBoard.visualBoard[x][y][0]-20, PlayBoard.visualBoard[x][y][1]-20, 40, 40);
-			put = false;
-		}
-	}
-	
+
 	static JPanel backGround; //배경 그려지고 돌 놓아질 그곳
 	static JPanel sensor ; //인식..해서..그..어..응.. 거기..잘모르겟슴 
 	static int x, y; //현재좌표 
@@ -94,9 +86,6 @@ public class Main extends JFrame{
 		
 		startGame();
 		
-		
-		Graphics g = backGround.getGraphics();
-
 		//돌 넣기... 
 		backGround.addMouseListener(new MouseAdapter() {
 			public void mouseClicked (MouseEvent e) {
@@ -128,14 +117,20 @@ public class Main extends JFrame{
 			
 	}
 
-	
-	
 	//게임진행 
 	public static void startGame() {
 		
 		setBasicStone(); //중립구 놓기
 		new PlayBoard();
 		
+	}
+	
+	//돌 하나 놔두는..거엿으면 좋겟다 
+	public static void PUT(Graphics g) {
+		if(put) {
+			g.fillOval(PlayBoard.visualBoard[x][y][0]-20, PlayBoard.visualBoard[x][y][1]-20, 40, 40);
+			put = false;
+		}
 	}
 	
 	//중립구 놓기 
@@ -164,15 +159,16 @@ public class Main extends JFrame{
 			//int num = Integer.getInteger(getNum.getText());
 			//System.out.println(getNum.getText());
 			
-			
-			for(int i = 5 ; i < 10; i ++) {
-				
-				x = i;
-				y = i;
-				PlayBoard.c = 5;
-				PlayBoard.setStone();
-			}
-
+			//임의의 위치에 회색돌 두개 넣기 
+			PlayBoard.count = -1;
+			x = 5;
+			y = 7;
+			PlayBoard.setStone();
+			PlayBoard.count = -1;
+			x = 11;
+			y = 2;
+			PlayBoard.setStone();
+			PlayBoard.count = 1; //다음값이 검정 한번 나오도록 세팅 
 			
 		});
 		
@@ -180,6 +176,12 @@ public class Main extends JFrame{
 		
 	}
 	
+	//승리메세지
+	public static void winPopUp() {
+		JFrame pop = new JFrame(); //팝업창
+  	  	JOptionPane.showMessageDialog(pop, "게임 종료!");
+  	  
+	}
 }
 
 
@@ -211,21 +213,27 @@ class PlayBoard{
 	//내부적으로 입력... 
 	static void setStone() {
 		//System.out.println("playBoard["+(Main.x+1)+"]["+(Main.y+1)+"] = "+ playBoard[Main.x][Main.y]);
-		if(playBoard[Main.x][Main.y] == 0) { //빈자리라면 돌 배치
-			putStone(); //돌 놓기 
-			playBoard[Main.x][Main.y] = c; //돌 넣기 
-			System.out.printf("[system] (%d, %d) 에 %s을 배치했습니다\n", Main.x+1, Main.y+1, (c==1)?"흑돌":"백돌");
-		}else {
-			System.out.println("[system] 이미 놓여진 자리입니다.");
-			System.out.println("playBoard["+(Main.x+1)+"]["+(Main.y+1)+"] = "+ playBoard[Main.x][Main.y]);
+		if(Main.x < 19 && Main.y < 19) { //범위 넘지 않는 선에서 
+			if(playBoard[Main.x][Main.y] == 0){//빈자리라면 돌 배치
+				putStone(); //돌 놓기 
+				playBoard[Main.x][Main.y] = c; //돌 넣기 
+				System.out.printf("[system] (%d, %d) 에 %s을 배치했습니다\n", Main.x+1, Main.y+1, (c==1)?"흑돌":"백돌");
+				if(scanBoard()) {
+					//승리메서드 실행 
+				}
+			}else {
+				System.out.println("[system] 이미 놓여진 자리입니다.");
+				System.out.println("playBoard["+(Main.x+1)+"]["+(Main.y+1)+"] = "+ playBoard[Main.x][Main.y]);
+			}
 		}
-
 	}
 	
 	//돌 넣는 메서드
 	static void putStone() {
 		
-		if(count < 2) { //흑돌
+		if(count == -1) {
+			g.setColor(Color.gray);
+		}else if(count < 2) { //흑돌
 			c = 1;
 			g.setColor(Color.black);
 		}else { //백돌 
@@ -233,9 +241,7 @@ class PlayBoard{
 			g.setColor(Color.white);
 		}
 		
-		if(c == 5) {
-			g.setColor(Color.red);
-		}
+
 		
 		Main.put = true;
 		Main.PUT(g);
@@ -247,8 +253,97 @@ class PlayBoard{
 		
 	}
 	
-	
-	//playBoard를 스캔해서 조건 어쩌구 하는 메서드도 여기 만들면 좋을듯 
+	//판정하는 메서드
+	static boolean scanBoard() {
+		int x = Main.x;
+		int y = Main.y;
+		boolean flag = false; //승리판정 및 반환용
+		int connect[] = {0,0,0,0}; //0세로 1가로 2우대각 3좌대각 
+		int i; //뭐... 
+		
+		//세로판정(아래로/위로)
+		i = 0;
+		while(true) {
+			if(y+i > 18) break; //인덱스 넘어갈라카면 스탑 
+			//System.out.println(x+","+y+"="+playBoard[x][y+i] );
+			if(playBoard[x][y+i] == c) connect[0]++; //일치시 카운트 증가
+			else break; //불일치시 즉시스탑
+			i++;
+		}
+		while(true) {
+			if(y-i < 0) break; //인덱스 넘어갈라카면 스탑 
+			if(playBoard[x][y-i] == c) connect[0]++; //일치시 카운트 증가
+			else break; //불일치시 즉시스탑
+			i++;
+		}
+		System.out.println("세로연속점"+connect[0]+"개");
+		
+		
+		//가로판정
+		i = 0;
+		while(true) {
+			if(x+i > 18) break; //인덱스 넘어갈라카면 스탑 
+			//System.out.println(x+","+y+"="+playBoard[x][y+i] );
+			if(playBoard[x+i][y] == c) connect[1]++; //일치시 카운트 증가
+			else break; //불일치시 즉시스탑
+			i++;
+		}
+		while(true) {
+			if(x-i < 0) break; //인덱스 넘어갈라카면 스탑 
+			if(playBoard[x-i][y] == c) connect[1]++; //일치시 카운트 증가
+			else break; //불일치시 즉시스탑
+			i++;
+		}
+		System.out.println("가로연속점"+connect[1]+"개");
+		
+
+		//우대각판정
+		i = 0;
+		while(true) {
+			if(y+i > 18 || x-i < 0) break; //인덱스 넘어갈라카면 스탑 
+			//System.out.println(x+","+y+"="+playBoard[x][y+i] );
+			if(playBoard[x-i][y+i] == c) connect[2]++; //일치시 카운트 증가
+			else break; //불일치시 즉시스탑
+			i++;
+		}
+		while(true) {
+			if(x+i > 18 || y-i < 0) break; //인덱스 넘어갈라카면 스탑 
+			if(playBoard[x+i][y-i] == c) connect[2]++; //일치시 카운트 증가
+			else break; //불일치시 즉시스탑
+			i++;
+		}
+		System.out.println("우대각연속점"+connect[2]+"개");
+		
+		//좌대각판정
+		i = 0;
+		while(true) {
+			if(y+i > 18 || x+i > 18) break; //인덱스 넘어갈라카면 스탑 
+			//System.out.println(x+","+y+"="+playBoard[x][y+i] );
+			if(playBoard[x+i][y+i] == c) connect[3]++; //일치시 카운트 증가
+			else break; //불일치시 즉시스탑
+			i++;
+		}
+		while(true) {
+			if(x-i < 0 || y-i < 0) break; //인덱스 넘어갈라카면 스탑 
+			if(playBoard[x-i][y-i] == c) connect[3]++; //일치시 카운트 증가
+			else break; //불일치시 즉시스탑
+			i++;
+		}
+		System.out.println("좌대각연속점"+connect[3]+"개");
+		
+		
+		//여섯개짜리 연결이 있는지 판정 
+		for( i = 0; i < 4; i++) {
+			if(connect[i] == 6) {
+				flag = true;
+				System.out.println("승리");
+			}
+		}
+		
+		
+		return flag; //승리시 true 반환
+		
+	}
 	
 	
 	
