@@ -107,6 +107,11 @@ public class Main extends JFrame{
 			startGame(); //새 게임 시작
 		});
 		
+		//예아~끗~
+		JLabel info = new JLabel("2021-winter | java | project5 | Leeejjju");
+		info.setBounds(665, 0, 225, 30);
+		backGround.add(info);
+		
 	
 		setVisible(true); //쨘
 		startGame();
