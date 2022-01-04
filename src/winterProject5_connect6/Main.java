@@ -30,7 +30,7 @@ public class Main extends JFrame{
 	
 	//자동실행, 바둑판 그리기 
 	@Override //그냥...실행되는놈임 
-	 public void paint(Graphics g) {
+	public void paint(Graphics g) {
 	      super.paint(g);
 	      System.out.println("선긋는중...");
 
@@ -51,15 +51,16 @@ public class Main extends JFrame{
 				}
 			}
 		}
-	
 
 	static JPanel backGround; //배경 그려지고 돌 놓아질 그곳
 	static int x, y; //현재좌표 
 	static Color COR; //색
-	
 	static boolean on = false; //게임중인가?(돌이 놓아지는가에 대한 어쩌구) 
-	
 	static JPanel showTurn; //배경색으로 차례 표시 
+	static JLabel Info; //메세지 표시 
+	
+	static int num; //중립구 갯수!!! 
+	static int countJoong = 0 ;
 	
 	//육목 판 만들기, 기본세팅 
 	public Main() {
@@ -80,6 +81,11 @@ public class Main extends JFrame{
 		add(backGround); //보여랏
 		
 		//현재 차례 표시할 어쩌구
+		Info = new JLabel("[System] 육목 게임을 시작합니다.");
+		Info.setBounds(20, 0, 500, 30);
+		backGround.add(Info);
+		
+		//현재 차례 표시할 어쩌구
 		JLabel turnInfo = new JLabel("이번 차례");
 		turnInfo.setBounds(770, 50, 200, 50);
 		backGround.add(turnInfo);
@@ -91,11 +97,13 @@ public class Main extends JFrame{
 		
 		//다시하기
 		JButton reset = new JButton("새로운 게임");
-		reset.setBounds(760, 180, 100, 50);
-		reset.setBackground(Color.LIGHT_GRAY);
+		reset.setBounds(760, 180, 100, 45);
+		reset.setBackground(new Color(225,215,200));
 		backGround.add(reset);
 		reset.addActionListener(event->{
 			repaint(); //게임판 리셋하고
+			Info.setText("[System] 새로운 게임을 시작합니다.");
+			countJoong = 0;
 			startGame(); //새 게임 시작
 		});
 		
@@ -103,11 +111,12 @@ public class Main extends JFrame{
 		setVisible(true); //쨘
 		startGame();
 		
-		//돌 넣기... 
+		
+		
+		//클릭시 
 		backGround.addMouseListener(new MouseAdapter() {
 			public void mouseClicked (MouseEvent e) {
-				
-				if(on) {
+				if(on) { //게임중일때만 작동하도록 
 					//이상적인 위치선정(공식 만들어 사용함...)
 					double n = ((float)e.getX()-(float)44)/(float)40;
 					if(n < 0.05) {
@@ -121,14 +130,29 @@ public class Main extends JFrame{
 					}else {
 						 y = (int)n+1;
 					}
-					PlayBoard.setStone();
+					
+					
+					if(countJoong < num) {
+						PlayBoard.count = -1; //회색으로 염색시킨 중립구를
+						PlayBoard.putStone(); //난수위치에 둔다
+						if(countJoong == num-1) Info.setText("[System] 중립구 배치 완료. 게임을 시작합니다."); 
+						else Info.setText("[System] "+(num-countJoong-1)+"개의 중립구를 배치해주세요"); 
+						countJoong ++;
+					}else if(countJoong == num) {
+						PlayBoard.count = 1;
+						countJoong++;
+						PlayBoard.setStone();
+					}else {
+						PlayBoard.setStone();
+					}
+					
+					
 				}
 
 			}
 		});
 		
 	}
-	
 	
 	//메인함수. 그저 실행할 뿐 
 	public static void main(String[] args) {
@@ -137,7 +161,7 @@ public class Main extends JFrame{
 			
 	}
 
-	//게임진행 
+	//게임세팅  
 	public static void startGame() {
 		
 		setBasicStone(); //중립구 놓기
@@ -156,7 +180,7 @@ public class Main extends JFrame{
 		f.setLocationRelativeTo(null);//화면의 어느 위치에서 첫 등장할지>> null이면 자동 센터지정 
 		f.setLayout(null); //레이아웃설정
 		
-		JLabel info = new JLabel("      시작시 놓일 중립구의 수를 입력하세요");
+		JLabel info = new JLabel("      중립구의 갯수를 입력하세요");
 		info.setBounds(5, 5, 280, 30);
 		f.add(info);
 		
@@ -165,35 +189,51 @@ public class Main extends JFrame{
 		f.add(getNum);
 		
 		JButton get = new JButton("confirm");
-		get.setBounds(5, 80, 280, 30);
+		get.setBounds(5, 77, 280, 30);
+		get.setBackground(new Color(225,215,200));
 		f.add(get);
 		get.addActionListener(event->{
 			
-			int count = 0;
-			int n = Integer.parseInt(getNum.getText());
-			//입력받은 갯수만큼의 난수위치에 중립구 놓기 
-			while(count < n) {
-				x = (int)(Math.random()*18); //0~18범위의 난수 생성 
-				y = (int)(Math.random()*18); //0~18범위의 난수 생성 
-				if(PlayBoard.playBoard[x][y] == 0){ //빈자리라면
-					PlayBoard.count = -1; //회색으로 염색시킨 중립구를
-					PlayBoard.putStone(); //난수위치에 둔다
-					count ++;
-				}
-			}
-			PlayBoard.count = 1; //다음차례때 흑돌 하나로 시작하도록 세팅
-			f.dispose(); //창닫기
+			//int count = 0;
 			
+			
+			try {
+				//입력받은 숫자로 num세팅하기 
+				num = Integer.parseInt(getNum.getText());
+				
+				/*
+				//입력받은 갯수만큼의 난수위치에 중립구 놓기 
+				while(count < n) {
+					x = (int)(Math.random()*18); //0~18범위의 난수 생성 
+					y = (int)(Math.random()*18); //0~18범위의 난수 생성 
+					if(PlayBoard.playBoard[x][y] == 0){ //빈자리라면
+						PlayBoard.count = -1; //회색으로 염색시킨 중립구를
+						PlayBoard.putStone(); //난수위치에 둔다
+						count ++;
+					}
+				}
+				PlayBoard.count = 1; //다음차례때 흑돌 하나로 시작하도록 세팅
+				*/
+				if(num != 0) Info.setText("[System] "+num+"개의 중립구를 배치해주세요"); 
+				f.dispose(); //창닫기
+				
+			}catch (Exception e){
+				JFrame pop = new JFrame(); //팝업창
+		  	  	JOptionPane.showMessageDialog(pop, "정수값을 입력해주세요");
+			}
+	
 		});
 		
 		f.setVisible(true);
 		
 	}
-	
+
+
 	//승리메세지
 	public static void winPopUp() {
+		Info.setText("[system] "+"게임 종료! (승자: "+ ((PlayBoard.c == 1)? "흑돌)":"백돌)"));
 		JFrame pop = new JFrame(); //팝업창
-  	  	JOptionPane.showMessageDialog(pop, "게임 종료!\n (승자: "+ ((PlayBoard.c == 1)? "흑돌)":"백돌)"));
+  	  	JOptionPane.showMessageDialog(pop, "게임 종료! (승자: "+ ((PlayBoard.c == 1)? "흑돌)":"백돌)"));
   	  	on = false; //게임끗 
 	}
 
@@ -227,19 +267,21 @@ class PlayBoard{
 	
 	//돌 배치하기
 	static void setStone() {
-		//System.out.println("playBoard["+(Main.x+1)+"]["+(Main.y+1)+"] = "+ playBoard[Main.x][Main.y]);
 		if(Main.x < 19 && Main.y < 19) { //범위 넘지 않는 선에서 
 			if(playBoard[Main.x][Main.y] == 0){//빈자리라면 돌 배치
 				putStone(); //돌 놓기 
 				playBoard[Main.x][Main.y] = c; //돌 넣기 
-				if(c != 5) System.out.printf("[system] (%d, %d) 에 %s을 배치했습니다\n", Main.x+1, Main.y+1, (c==1)?"흑돌":"백돌");
+				if(c != 5) {
+					Main.Info.setText("[system] ("+(Main.x+1)+", "+(Main.y+1)+") 에 "+((c==1)?"흑돌":"백돌")+"을 배치했습니다\n");
+					//System.out.printf("[system] (%d,  %d) 에 %s을 배치했습니다\n", Main.x+1, Main.y+1, (c==1)?"흑돌":"백돌");
+				}
 				changeTurn(); //현재차례 표시 바꾸기
 				if(ScanBoard.scan()) {
 					Main.winPopUp();
 				}
 			}else {
-				System.out.println("[system] 이미 놓여진 자리입니다.");
-				//System.out.println("playBoard["+(Main.x+1)+"]["+(Main.y+1)+"] = "+ playBoard[Main.x][Main.y]);
+				Main.Info.setText("[system] 이미 놓여진 자리입니다.");
+				//System.out.println("[system] 이미 놓여진 자리입니다.");
 			}
 		}
 	}
@@ -287,17 +329,18 @@ class PlayBoard{
 
 }
 
+
 //판정하는놈...!! 
 class ScanBoard {
 	
 	static int x;
 	static int y;
 	static boolean flag = false; //승리판정 및 반환용
-	static int connect[] = {0,0,0,0}; //0세로 1가로 2우대각 3좌대각 
+	static int connect[] = {1,1,1,1}; //0세로 1가로 2우대각 3좌대각 연결점 갯수 
 	static int i; //뭐...
 	
 
-	//세로판정(아래로/위로)
+	//세로 연결점 세기(아래로/위로)
 	static void sero() {
 		i = 1;
 		while(true) {
@@ -326,11 +369,11 @@ class ScanBoard {
 			else break; //불일치시 즉시스탑
 			i++;
 		}
-		System.out.println("세로연속점"+connect[0]+"개");
+		//System.out.println("세로연속점"+connect[0]+"개");
 		
 	}
 
-	//가로판정
+	//가로 연결점 세기
 	static void garo() {
 		i = 1;
 		while(true) {
@@ -359,11 +402,11 @@ class ScanBoard {
 			else break; //불일치시 즉시스탑
 			i++;
 		}
-		System.out.println("가로연속점"+connect[1]+"개");
+		//System.out.println("가로연속점"+connect[1]+"개");
 		
 	}
 
-	//우대각판정
+	//우대각 연결점 세기
 	static void wo() {
 		i = 1;
 		while(true) {
@@ -392,11 +435,11 @@ class ScanBoard {
 			else break; //불일치시 즉시스탑
 			i++;
 		}
-		System.out.println("우대각연속점"+connect[2]+"개");
+		//System.out.println("우대각연속점"+connect[2]+"개");
 		
 	}
 
-	//좌대각판정
+	//좌대각 연결점 세기
 	static void jwa() {
 		i = 1;
 		while(true) {
@@ -425,11 +468,11 @@ class ScanBoard {
 			else break; //불일치시 즉시스탑
 			i++;
 		}
-		System.out.println("좌대각연속점"+connect[3]+"개");
+		//System.out.println("좌대각연속점"+connect[3]+"개");
 		
 	}
 
-	//여섯개짜리 연결이 있는지 판정 
+	//여섯개짜리 연결점이 있는지 판정 
 	static boolean scan() {
 		flag = false;
 		//현시점의 x,y 받아오기 
