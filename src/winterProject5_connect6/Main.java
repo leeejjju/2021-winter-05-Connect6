@@ -344,7 +344,6 @@ class ScanBoard {
 	static int connect[] = {1,1,1,1}; //0세로 1가로 2우대각 3좌대각 연결점 갯수 
 	static int i; //뭐...
 	
-
 	//세로 연결점 세기(아래로/위로)
 	static void sero() {
 		i = 1;
