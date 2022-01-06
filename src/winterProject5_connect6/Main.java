@@ -745,35 +745,67 @@ class alphago {
 	      }
 	      
 
-	      if(add >= 2) return;
-	      // 3세로 1 공백 공격
-	      for (int i = 0; i < 19; i++) {
-	         myCount = 0;
-	         for (int j = 0; j < 19; j++) {
-	            try {
-	               if (PlayBoard.playBoard[i][j] == Main.ComC) {
-	                  myCount++;
-	                  if (myCount == 3) { //세번연속일때 
-	                	  //111010 
-	                     if (PlayBoard.playBoard[i][j + 1] == 0 && PlayBoard.playBoard[i][j + 2] == Main.UserC && PlayBoard.playBoard[i][j + 3] == 0) {
-	                        if(weight[i ][j+ 3] > weight[i ][j+ 1]) {
-	                        	superWeight[i][j + 3] += 40; add++;
-	                        }else {
-	                           weight[i][j + 1] += 40; add++;
-	                        }
-	                     } 
-	                     //010111
-	                     else if (PlayBoard.playBoard[i ][j- 3] == 0 && PlayBoard.playBoard[i ][j- 4] == Main.UserC && PlayBoard.playBoard[i ][j- 5] == 0) {
-	                        if(weight[i ][j- 3]  > weight[i ][j- 5]) {
-	                        	superWeight[i ][j- 3] += 40; add++;}
-	                        else {
-	                        	superWeight[i ][j- 5] += 40; add++;}
-	                        }
-	                  }
-	               } else myCount = 0;
-	            } catch (ArrayIndexOutOfBoundsException e) {}
+
+	         if(add >= 2) return;
+	         // 3세로 1 공백 공격
+	         for (int i = 0; i < 19; i++) {
+	            myCount = 0;
+	            for (int j = 0; j < 19; j++) {
+	               try {
+	                  if (PlayBoard.playBoard[i][j] == Main.ComC) {
+	                     myCount++;
+	                     if (myCount == 3) { //세번연속일때 
+	                        //111010 
+	                        if (PlayBoard.playBoard[i][j + 1] == 0 && PlayBoard.playBoard[i][j + 2] == Main.ComC && PlayBoard.playBoard[i][j + 3] == 0) {
+	                           if(weight[i ][j+ 3] > weight[i ][j+ 1]) {
+	                              superWeight[i][j + 3] += 40; add++;
+	                           }else {
+	                        	   superWeight[i][j + 1] += 40; add++;
+	                           }
+	                        } 
+	                        //010111
+	                        else if (PlayBoard.playBoard[i ][j- 3] == 0 && PlayBoard.playBoard[i ][j- 4] == Main.ComC && PlayBoard.playBoard[i ][j- 5] == 0) {
+	                           if(weight[i ][j- 3]  > weight[i ][j- 5]) {
+	                              superWeight[i ][j- 3] += 40; add++;}
+	                           else {
+	                              superWeight[i ][j- 5] += 40; add++;}
+	                           }
+	                     }
+	                  } else myCount = 0;
+	               } catch (ArrayIndexOutOfBoundsException e) {}
+	            }
 	         }
-	      }
+	         
+	         if(add >= 2) return;
+	         // 3세로 2 공백 공격
+	         for (int i = 0; i < 19; i++) {
+	            myCount = 0;
+	            for (int j = 0; j < 19; j++) {
+	               try {
+	                  if (PlayBoard.playBoard[i][j] == Main.ComC) {
+	                     myCount++;
+	                     if (myCount == 3) { //세번연속일때 
+	                        //111010 
+	                        if (PlayBoard.playBoard[i][j + 1] == 0 && PlayBoard.playBoard[i][j + 2] == 0 && PlayBoard.playBoard[i][j + 3] == Main.ComC) {
+	                           if(weight[i ][j+ 2] > weight[i ][j+ 1]) {
+	                              superWeight[i][j + 2] += 40; add++;
+	                           }else {
+	                        	   superWeight[i][j + 1] += 40; add++;
+	                           }
+	                        } 
+	                        //010111
+	                        else if (PlayBoard.playBoard[i ][j- 3] == 0 && PlayBoard.playBoard[i ][j- 4] == 0 && PlayBoard.playBoard[i ][j- 5] == Main.ComC) {
+	                           if(weight[i ][j- 3]  > weight[i ][j- 4]) {
+	                              superWeight[i ][j- 3] += 40; add++;}
+	                           else {
+	                              superWeight[i ][j- 4] += 40; add++;}
+	                           }
+	                     }
+	                  } else myCount = 0;
+	               } catch (ArrayIndexOutOfBoundsException e) {}
+	            }
+	         }
+	         
 	      
 	      
 	      if(add >= 2) return;
@@ -906,33 +938,63 @@ class alphago {
 	      
 	      
 
-	      if(add >= 2) return;
-	      // 3가로 1 공백 공격 
-	      for (int j = 0; j < 19; j++) {
-	         myCount = 0;
-	         for (int i = 0; i < 19; i++) {
-	            try {
-	               if (PlayBoard.playBoard[i][j] == Main.ComC) {
-	                  myCount++;
-	                  if (myCount == 3) {
-	                     if (PlayBoard.playBoard[i + 1][j] == 0 && PlayBoard.playBoard[i + 2][j] == Main.UserC && PlayBoard.playBoard[i + 3][j] == 0) {
-	                        if(weight[i + 3][j] > weight[i + 1][j]) {
-	                        	superWeight[i + 3][j] += 40; add++;
-	                        }else {
-	                           weight[i + 1][j] += 40; add++;
-	                        }
-	                     } 
-	                     else if (PlayBoard.playBoard[i - 3][j] == 0 && PlayBoard.playBoard[i - 4][j] == Main.UserC && PlayBoard.playBoard[i - 5][j] == 0) {
-	                        if(weight[i - 3][j]  > weight[i - 5][j]) {
-	                        	superWeight[i - 3][j] += 40; add++;}
-	                        else {
-	                        	superWeight[i - 5][j] += 40; add++;}
-	                        }
-	                  }
-	               } else myCount = 0;
-	            } catch (ArrayIndexOutOfBoundsException e) {}
+
+	         if(add >= 2) return;
+	         // 3가로 1 공백 공격 
+	         for (int j = 0; j < 19; j++) {
+	            myCount = 0;
+	            for (int i = 0; i < 19; i++) {
+	               try {
+	                  if (PlayBoard.playBoard[i][j] == Main.ComC) {
+	                     myCount++;
+	                     if (myCount == 3) {
+	                        if (PlayBoard.playBoard[i + 1][j] == 0 && PlayBoard.playBoard[i + 2][j] == Main.ComC && PlayBoard.playBoard[i + 3][j] == 0) {
+	                           if(weight[i + 3][j] > weight[i + 1][j]) {
+	                              superWeight[i + 3][j] += 40; add++;
+	                           }else {
+	                        	   superWeight[i + 1][j] += 40; add++;
+	                           }
+	                        } 
+	                        else if (PlayBoard.playBoard[i - 3][j] == 0 && PlayBoard.playBoard[i - 4][j] == Main.ComC && PlayBoard.playBoard[i - 5][j] == 0) {
+	                           if(weight[i - 3][j]  > weight[i - 5][j]) {
+	                              superWeight[i - 3][j] += 40; add++;}
+	                           else {
+	                              superWeight[i - 5][j] += 40; add++;}
+	                           }
+	                     }
+	                  } else myCount = 0;
+	               } catch (ArrayIndexOutOfBoundsException e) {}
+	            }
 	         }
-	      }
+	         
+	         
+	         if(add >= 2) return;
+	         // 3가로 2 공백 공격 
+	         for (int j = 0; j < 19; j++) {
+	            myCount = 0;
+	            for (int i = 0; i < 19; i++) {
+	               try {
+	                  if (PlayBoard.playBoard[i][j] == Main.ComC) {
+	                     myCount++;
+	                     if (myCount == 3) {
+	                        if (PlayBoard.playBoard[i + 1][j] == 0 && PlayBoard.playBoard[i + 2][j] == 0 && PlayBoard.playBoard[i + 3][j] == Main.ComC ) {
+	                           if(weight[i + 2][j] > weight[i + 1][j]) {
+	                              superWeight[i + 2][j] += 40; add++;
+	                           }else {
+	                        	   superWeight[i + 1][j] += 40; add++;
+	                           }
+	                        } 
+	                        else if (PlayBoard.playBoard[i - 3][j] == 0 && PlayBoard.playBoard[i - 4][j] == 0 && PlayBoard.playBoard[i - 5][j] == Main.ComC) {
+	                           if(weight[i - 3][j]  > weight[i - 4][j]) {
+	                              superWeight[i - 3][j] += 40; add++;}
+	                           else {
+	                              superWeight[i - 4][j] += 40; add++;}
+	                           }
+	                     }
+	                  } else myCount = 0;
+	               } catch (ArrayIndexOutOfBoundsException e) {}
+	            }
+	         }
 
 	      
 	      if(add >= 2) return;
@@ -1126,6 +1188,40 @@ class alphago {
 		      }
 		   }
 		   
+		   if(add >= 2) return;
+		   // 3(좌대각\) 2공백 1 공격
+		   for(int i = 0;i<19;i++){
+		      myCount = 0;
+		      for (int j = 0; j < 19; j++) {
+		         int temp1 = i;
+		         int temp2 = j;
+		         for (int k = 0; k < 3; k++) {
+		        	 try {
+		            if (PlayBoard.playBoard[temp1][temp2] == Main.ComC) {
+		               myCount++;
+		                  if (myCount == 3) {
+		                    if (PlayBoard.playBoard[temp1 + 1][temp2+ 1] == 0 && PlayBoard.playBoard[temp1 + 2][temp2 + 2] == 0 && PlayBoard.playBoard[temp1 + 3][temp2+ 3] == Main.ComC) {
+			                
+			                    	superWeight[temp1 + 1][temp2+ 1] += 40; add++;
+			                   
+			                    	superWeight[temp1 + 2][temp2+ 2] += 40; add++;
+			                    
+			                 } 
+			                 else if (PlayBoard.playBoard[temp1 - 3][temp2- 3] == 0 && PlayBoard.playBoard[temp1 - 4][temp2- 4] == 0 && PlayBoard.playBoard[temp1 - 5][temp2- 5] == Main.ComC) {
+			                
+			                    	superWeight[temp1- 3][temp2- 3] += 40; add++;
+			                 
+			                    	superWeight[temp1 - 4][temp2- 4] += 40; add++;
+			                 }
+		                  }
+			                  temp1++;
+			                  temp2++;
+		                  } else myCount = 0;
+		        	 } catch (ArrayIndexOutOfBoundsException e) {}
+		         }
+		      }
+		   }
+		   
 
 		   if(add >= 2) return;
 		      // 2 (공백2) 2 공격 (좌대각\)왼쪽 위에서 오른쪽 아래
@@ -1301,7 +1397,7 @@ class alphago {
 			                    if(weight[temp1 - 3][temp2+ 3] > weight[temp1 - 1][temp2+ 1]) {
 			                    	superWeight[temp1 - 3][temp2+ 3] += 40; add++;
 			                    }else {
-			                       weight[temp1 - 1][temp2+ 1] += 40; add++;
+			                       superWeight[temp1 - 1][temp2+ 1] += 40; add++;
 			                    }
 			                 } 
 			                 else if (PlayBoard.playBoard[temp1 + 3][temp2- 3] == 0 && PlayBoard.playBoard[temp1 + 4][temp2- 4] == Main.UserC && PlayBoard.playBoard[temp1 + 5][temp2- 5] == 0) {
@@ -1315,6 +1411,42 @@ class alphago {
 			                  temp2++;
 		                  } else myCount = 0;
 		            } catch (ArrayIndexOutOfBoundsException e) {}
+		         }
+		      }
+		   }
+		   
+		   if(add >= 2) return;
+		   // 3(우대각/) 2공백 1 공격
+		   for(int j = 0;j<19;j++){
+		      myCount = 0;
+		      for (int i = 0; i < 19; i++) {
+		         int temp1 = i;
+		         int temp2 = j;
+		         for (int k = 0; k < 3; k++) {
+		        	try {
+		            if (PlayBoard.playBoard[temp1][temp2] == Main.ComC) {
+		               myCount++;
+		               
+		                  if (myCount == 3) {
+		                    if (PlayBoard.playBoard[temp1 - 1][temp2+ 1] == 0 && PlayBoard.playBoard[temp1 - 2][temp2 + 2] == 0 && PlayBoard.playBoard[temp1 - 3][temp2+ 3] == Main.ComC) {
+			                  
+			                    	superWeight[temp1 - 2][temp2+ 2] += 40; add++;
+			                    
+			                    	superWeight[temp1 - 1][temp2+ 1] += 40; add++;
+			                    
+			                 } 
+			                 else if (PlayBoard.playBoard[temp1 + 3][temp2- 3] == 0 && PlayBoard.playBoard[temp1 + 4][temp2- 4] == 0 && PlayBoard.playBoard[temp1 + 5][temp2- 5] == Main.ComC) {
+			                    
+			                    	superWeight[temp1+ 3][temp2 - 3] += 40; add++;
+			                   
+			                    	superWeight[temp1 + 4][temp2 - 4] += 40; add++;
+			                   
+			                 }
+		                  }
+			                  temp1--;
+			                  temp2++;
+		                  } else myCount = 0;
+		        	} catch (ArrayIndexOutOfBoundsException e) {}
 		         }
 		      }
 		   }
@@ -1501,6 +1633,35 @@ class alphago {
 	         }
 	      }
 	      
+	         if(add >= 2) return;
+	         // 3세로 2 공백 방어
+	         for (int i = 0; i < 19; i++) {
+	            myCount = 0;
+	            for (int j = 0; j < 19; j++) {
+	               try {
+	                  if (PlayBoard.playBoard[i][j] == Main.UserC) {
+	                     myCount++;
+	                     if (myCount == 3) { //세번연속일때 
+	                        //111001
+	                        if (PlayBoard.playBoard[i][j + 1] == 0 && PlayBoard.playBoard[i][j + 2] == 0 && PlayBoard.playBoard[i][j + 3] == Main.UserC) {
+	                           if(weight[i ][j+ 2] > weight[i ][j+ 1]) {
+	                              superWeight[i][j + 2] += 40; add++;
+	                           }else {
+	                        	   superWeight[i][j + 1] += 40; add++;
+	                           }
+	                        } 
+	                        //100111
+	                        else if (PlayBoard.playBoard[i ][j- 3] == 0 && PlayBoard.playBoard[i ][j- 4] == 0 && PlayBoard.playBoard[i ][j- 5] == Main.UserC) {
+	                           if(weight[i ][j- 4]  > weight[i ][j- 3]) {
+	                              superWeight[i ][j- 4] += 40; add++;}
+	                           else {
+	                              superWeight[i ][j- 3] += 40; add++;}
+	                           }
+	                     }
+	                  } else myCount = 0;
+	               } catch (ArrayIndexOutOfBoundsException e) {}
+	            }
+	         }
 	      
 	      if(add >= 2) return;
 	         // 2 (공백2) 2 방어 세로
@@ -1670,6 +1831,34 @@ class alphago {
 	         }
 	      }
 	      
+
+	         if(add >= 2) return;
+	         // 3가로 2 공백 방어 
+	         for (int j = 0; j < 19; j++) {
+	            myCount = 0;
+	            for (int i = 0; i < 19; i++) {
+	               try {
+	                  if (PlayBoard.playBoard[i][j] == Main.UserC) {
+	                     myCount++;
+	                     if (myCount == 3) {
+	                        if (PlayBoard.playBoard[i + 1][j] == 0 && PlayBoard.playBoard[i + 2][j] == 0 && PlayBoard.playBoard[i + 3][j] == Main.UserC) {
+	                           if(weight[i + 2][j] > weight[i + 1][j]) {
+	                              superWeight[i + 2][j] += 40; add++;
+	                           }else {
+	                        	   superWeight[i + 1][j] += 40; add++;
+	                           }
+	                        } 
+	                        else if (PlayBoard.playBoard[i - 3][j] == 0 && PlayBoard.playBoard[i - 4][j] == 0 && PlayBoard.playBoard[i - 5][j] == Main.UserC ) {
+	                           if(weight[i - 3][j]  > weight[i - 4][j]) {
+	                              superWeight[i - 3][j] += 40; add++;}
+	                           else {
+	                              superWeight[i - 4][j] += 40; add++;}
+	                           }
+	                     }
+	                  } else myCount = 0;
+	               } catch (ArrayIndexOutOfBoundsException e) {}
+	            }
+	         }
 	      
 	      if(add >= 2) return;
 	         // 2 (공백2) 2 방어 가로
@@ -1858,6 +2047,40 @@ class alphago {
 	      }
 	   }
 	   
+	   if(add >= 2) return;
+	   // 3(좌대각\) 2공백 1 방어
+	   for(int i = 0;i<19;i++){
+	      myCount = 0;
+	      for (int j = 0; j < 19; j++) {
+	         int temp1 = i;
+	         int temp2 = j;
+	         for (int k = 0; k < 3; k++) {
+	        	 try {
+	            if (PlayBoard.playBoard[temp1][temp2] == Main.UserC) {
+	               myCount++;
+	                  if (myCount == 3) {
+	                    if (PlayBoard.playBoard[temp1 + 1][temp2+ 1] == 0 && PlayBoard.playBoard[temp1 + 2][temp2 + 2] == 0 && PlayBoard.playBoard[temp1 + 3][temp2+ 3] == Main.UserC) {
+		                    if(weight[temp1 + 1][temp2+ 1] > weight[temp1 + 2][temp2+ 2]) {
+		                    	superWeight[temp1 + 1][temp2+ 1] += 40; add++;
+		                    }else {
+		                       weight[temp1 + 2][temp2+ 2] += 40; add++;
+		                    }
+		                 } 
+		                 else if (PlayBoard.playBoard[temp1 - 3][temp2- 3] == 0 && PlayBoard.playBoard[temp1 - 4][temp2- 4] == 0 && PlayBoard.playBoard[temp1 - 5][temp2- 5] == Main.UserC) {
+		                    if(weight[temp1 - 3][temp2- 3]  > weight[temp1 - 4][temp2- 4]) {
+		                    	superWeight[temp1- 3][temp2- 3] += 40; add++;}
+		                    else {
+		                    	superWeight[temp1 - 4][temp2- 4] += 40; add++;}
+		                    }
+	                  }
+		                  temp1++;
+		                  temp2++;
+	                  } else myCount = 0;
+	        	 } catch (ArrayIndexOutOfBoundsException e) {}
+	         }
+	      }
+	   }
+	   
 	   
 	   if(add >= 2) return;
 	      // 2 (공백2) 2 방어 (좌대각\)왼쪽 위에서 오른쪽 아래
@@ -2034,6 +2257,42 @@ class alphago {
 		                 } 
 		                 else if (PlayBoard.playBoard[temp1 + 3][temp2- 3] == 0 && PlayBoard.playBoard[temp1 + 4][temp2- 4] == Main.UserC && PlayBoard.playBoard[temp1 + 5][temp2- 5] == 0) {
 		                    if(weight[temp1 + 3][temp2- 3]  > weight[temp1 + 5][temp2 - 5]) {
+		                    	superWeight[temp1+ 3][temp2 - 3] += 40; add++;}
+		                    else {
+		                    	superWeight[temp1 + 5][temp2 - 5] += 40; add++;}
+		                    }
+	                  
+	                  }
+		                  temp1--;
+		                  temp2++;
+	                  } else myCount = 0;
+	        	} catch (ArrayIndexOutOfBoundsException e) {}
+	         }
+	      }
+	   }
+	   
+	   if(add >= 2) return;
+	   // 3(우대각/) 2공백 1 방어
+	   for(int j = 0;j<19;j++){
+	      myCount = 0;
+	      for (int i = 0; i < 19; i++) {
+	         int temp1 = i;
+	         int temp2 = j;
+	         for (int k = 0; k < 3; k++) {
+	        	try {
+	            if (PlayBoard.playBoard[temp1][temp2] == Main.UserC) {
+	               myCount++;
+	               
+	                  if (myCount == 3) {
+	                    if (PlayBoard.playBoard[temp1 - 1][temp2+ 1] == 0 && PlayBoard.playBoard[temp1 - 2][temp2 + 2] == 0 && PlayBoard.playBoard[temp1 - 3][temp2+ 3] == Main.UserC) {
+		                    if(weight[temp1 - 2][temp2+ 2] > weight[temp1 - 1][temp2+ 1]) {
+		                    	superWeight[temp1 - 2][temp2+ 2] += 40; add++;
+		                    }else {
+		                       weight[temp1 - 1][temp2+ 1] += 40; add++;
+		                    }
+		                 } 
+		                 else if (PlayBoard.playBoard[temp1 + 3][temp2- 3] == 0 && PlayBoard.playBoard[temp1 + 4][temp2- 4] == 0 && PlayBoard.playBoard[temp1 + 5][temp2- 5] == Main.UserC) {
+		                    if(weight[temp1 + 3][temp2- 3]  > weight[temp1 + 4][temp2 - 4]) {
 		                    	superWeight[temp1+ 3][temp2 - 3] += 40; add++;}
 		                    else {
 		                    	superWeight[temp1 + 5][temp2 - 5] += 40; add++;}
