@@ -4,6 +4,8 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 
+// 안녕 나야
+
 /*
  *정보
  2021-01-03-11:00~ 2021-01-04 ??:??
