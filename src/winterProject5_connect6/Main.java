@@ -1,4 +1,4 @@
-package winterProject5_connect6;
+package Round6;
 
 import java.awt.*;
 import javax.swing.*;
@@ -677,10 +677,19 @@ class alphago {
 	               if (PlayBoard.playBoard[i][j] == Main.ComC) {
 	                  myCount++;
 	                  if (myCount == 5) { // 양끝 중 아무 빈곳에 가중치 왕창 이벤트
-	                     if (PlayBoard.playBoard[i][j - 5] == 0) {
+	                	  if (j - 5 < 0 && PlayBoard.playBoard[i][j + 1] == 0) {
+								superWeight[i][j + 1] += 40;
+								add++;
+	                	  }
+
+	                	  else if (j + 1 > 18 && PlayBoard.playBoard[i][j - 5] == 0) {
+								superWeight[i][j - 5] += 40;
+								add++;
+	                	  }
+	                	  else if (PlayBoard.playBoard[i][j - 5] == 0) {
 	                    	superWeight[i][j - 5] += 80;
 	                        add++;
-	                     } else if (PlayBoard.playBoard[i][j + 1] == 0) {
+	                	  } else if (PlayBoard.playBoard[i][j + 1] == 0) {
 	                    	superWeight[i][j + 1] += 80;
 	                        add++;
 	                     }
@@ -700,7 +709,18 @@ class alphago {
 	               if (PlayBoard.playBoard[i][j] == Main.ComC) {
 	                  myCount++;
 	                  if (myCount == 4) {
-	                     if (PlayBoard.playBoard[i][j - 4] == 0 && PlayBoard.playBoard[i][j + 1] == 0) {
+	                	  if (j - 4 < 0 && PlayBoard.playBoard[i][j + 1] == 0 && PlayBoard.playBoard[i][j + 2] == 0) {
+								superWeight[i][j + 1] += 40;
+								superWeight[i][j + 2] += 40;
+								add++;
+							}
+
+							else if (j + 1 > 18 && PlayBoard.playBoard[i][j - 4] == 0 && PlayBoard.playBoard[i][j - 5] == 0) {
+								superWeight[i][j - 4] += 40;
+								superWeight[i][j - 5] += 40;
+								add++;
+							}
+							else if (PlayBoard.playBoard[i][j - 4] == 0 && PlayBoard.playBoard[i][j + 1] == 0) {
 	                    	 superWeight[i][j - 4] += 80;
 	                    	 superWeight[i][j + 1] += 80;
 	                        add++;
@@ -817,7 +837,16 @@ class alphago {
 	               if (PlayBoard.playBoard[i][j] == Main.ComC) {
 	                  myCount++;
 	                  if (myCount == 5) { // 양끝 중 아무 빈곳에 가중치 왕창 이벤트
-	                     if (PlayBoard.playBoard[i - 5][j] == 0) {
+	                	  if (i - 5 < 0 && PlayBoard.playBoard[i + 1][j] == 0) {
+								superWeight[i + 1][j] += 40;
+								add++;
+							}
+
+							else if (i + 1 > 18 && PlayBoard.playBoard[i - 5][j] == 0) {
+								superWeight[i - 5][j] += 40;
+								add++;
+							}
+							else if (PlayBoard.playBoard[i - 5][j] == 0) {
 	                    	 superWeight[i - 5][j] += 80;
 	                        add++;
 	                     } else if (PlayBoard.playBoard[i + 1][j] == 0) {
@@ -840,7 +869,18 @@ class alphago {
 	               if (PlayBoard.playBoard[i][j] == Main.ComC) {
 	                  myCount++;
 	                  if (myCount == 4) {
-	                     if (PlayBoard.playBoard[i - 4][j] == 0 && PlayBoard.playBoard[i + 1][j] == 0) {
+	                	  if (i - 4 < 0 && PlayBoard.playBoard[i + 1][j] == 0 && PlayBoard.playBoard[i + 2][j] == 0) {
+								superWeight[i + 1][j] += 40;
+								superWeight[i + 2][j] += 40;
+								add++;
+							}
+
+							else if (i + 1 > 18 && PlayBoard.playBoard[i - 5][j] == 0 && PlayBoard.playBoard[i - 4][j] == 0) {
+								superWeight[i - 5][j] += 40;
+								superWeight[i - 4][j] += 40;
+								add++;
+							}
+							else  if (PlayBoard.playBoard[i - 4][j] == 0 && PlayBoard.playBoard[i + 1][j] == 0) {
 	                    	 superWeight[i - 4][j] += 80;
 	                    	 superWeight[i + 1][j] += 80;
 	                        add++;
@@ -961,7 +1001,15 @@ class alphago {
 	                  myCount++;
 	                     if (myCount == 5) {
 	                    	 //양끝뚫림 
-	                        if (PlayBoard.playBoard[temp1 - 5][temp2 - 5] == 0
+	                    	 if((temp1 - 5 < 0 || temp2 - 5 < 0) && PlayBoard.playBoard[temp1 + 1][temp2 + 1] == 0) {
+									superWeight[temp1 + 1][temp2 + 1] += 40;
+									add++;
+								}
+								else if((temp1 + 1 > 18 || temp2 + 1 > 18) && PlayBoard.playBoard[temp1 - 5][temp2 - 5] == 0){
+									superWeight[temp1 - 5][temp2 - 5] += 40;
+									add++;
+								}
+								else if (PlayBoard.playBoard[temp1 - 5][temp2 - 5] == 0
 	                              && PlayBoard.playBoard[temp1 + 1][temp2 + 1] == 0) {
 	                        	superWeight[temp1 - 5][temp2 - 5] += 80; //양끝막기 
 	                        	superWeight[temp1 + 1][temp2 + 1] += 80;
@@ -1002,7 +1050,17 @@ class alphago {
 	                if (PlayBoard.playBoard[temp1][temp2] == Main.ComC) {
 	                  myCount++;
 	                     if (myCount == 4) {
-	                        if (PlayBoard.playBoard[temp1 - 4][temp2 - 4] == 0
+	                    	 if((temp1 - 4 < 0 || temp2 - 4 < 0) && PlayBoard.playBoard[temp1 + 1][temp2 + 1] == 0 && PlayBoard.playBoard[temp1 + 2][temp2 + 2] == 0) {
+									superWeight[temp1 + 1][temp2 + 1] += 40;
+									superWeight[temp1 + 2][temp2 + 2] += 40;
+									add++;
+								}
+								else if((temp1 + 1 > 18 || temp2 + 1 > 18) && PlayBoard.playBoard[temp1 - 5][temp2 - 5] == 0 && PlayBoard.playBoard[temp1 - 4][temp2 - 4] == 0){
+									superWeight[temp1 - 5][temp2 - 5] += 40;
+									superWeight[temp1 - 4][temp2 - 4] += 40;
+									add++;
+								}
+								else if (PlayBoard.playBoard[temp1 - 4][temp2 - 4] == 0
 	                              && PlayBoard.playBoard[temp1 + 1][temp2 + 1] == 0) {
 	                        	superWeight[temp1 - 4][temp2 - 4] += 80;
 	                        	superWeight[temp1 + 1][temp2 + 1] += 80;
@@ -1139,7 +1197,15 @@ class alphago {
 	                if (PlayBoard.playBoard[temp1][temp2] == Main.ComC) {
 	                	myCount++;
 	                    if (myCount == 5) {
-	                        if (PlayBoard.playBoard[temp1 + 5][temp2 - 5] == 0
+	                    	if((temp1 - 1 < 0 || temp2 + 1 > 18) && PlayBoard.playBoard[temp1 + 5][temp2 - 5] == 0) {
+								superWeight[temp1 + 5][temp2 - 5] += 40;
+								add++;
+								}
+							else if((temp1 + 5 > 18 || temp2 - 5 < 0) && PlayBoard.playBoard[temp1 - 1][temp2 + 1] == 0){
+								superWeight[temp1 - 1][temp2 + 1] += 40;
+								add++;
+							}
+							else if (PlayBoard.playBoard[temp1 + 5][temp2 - 5] == 0
 	                              && PlayBoard.playBoard[temp1 - 1][temp2 + 1] == 0) {
 	                        	superWeight[temp1 + 5][temp2 - 5] += 50;
 	                        	superWeight[temp1 - 1][temp2 + 1] += 50;
@@ -1177,7 +1243,17 @@ class alphago {
 	                if (PlayBoard.playBoard[temp1][temp2] == Main.ComC) {
 	                	myCount++;
 	                    if (myCount == 4) {
-	                        if (PlayBoard.playBoard[temp1 + 4][temp2 - 4] == 0
+	                    	if((temp1 - 1 < 0 || temp2 + 1 > 18) && PlayBoard.playBoard[temp1 + 5][temp2 - 5] == 0 && PlayBoard.playBoard[temp1 + 4][temp2 - 4] == 0) {
+								superWeight[temp1 + 5][temp2 - 5] += 40;
+								superWeight[temp1 + 4][temp2 - 4] += 40;
+								add++;
+							}
+							else if((temp1 + 4 > 18 || temp2 - 4 < 0) && PlayBoard.playBoard[temp1 - 1][temp2 + 1] == 0 && PlayBoard.playBoard[temp1 - 2][temp2 + 2] == 0){
+								superWeight[temp1 - 1][temp2 + 1] += 40;
+								superWeight[temp1 - 2][temp2 + 2] += 40;
+								add++;
+							}
+							else if (PlayBoard.playBoard[temp1 + 4][temp2 - 4] == 0
 	                              && PlayBoard.playBoard[temp1 - 1][temp2 + 1] == 0) {
 	                        	superWeight[temp1 + 4][temp2 - 4] += 50;
 	                        	superWeight[temp1 - 1][temp2 + 1] += 50;
@@ -1320,7 +1396,16 @@ class alphago {
 	                  myCount++;
 	                  if (myCount == 5) {
 	                     // 양쪽 다 비었으면 양쪽 시급하게 막고
-	                     if (PlayBoard.playBoard[i][j - 5] == 0 && PlayBoard.playBoard[i][j + 1] == 0) {
+	                		if (j - 5 < 0 && PlayBoard.playBoard[i][j + 1] == 0) {
+								superWeight[i][j + 1] += 40;
+								add++;
+							}
+
+							else if (j + 1 > 18 && PlayBoard.playBoard[i][j - 5] == 0) {
+								superWeight[i][j - 5] += 40;
+								add++;
+							}
+							else if (PlayBoard.playBoard[i][j - 5] == 0 && PlayBoard.playBoard[i][j + 1] == 0) {
 	                    	 superWeight[i][j - 5] += 40; add++;
 	                    	 superWeight[i][j + 1] += 40; add++;
 	                     }
@@ -1345,9 +1430,16 @@ class alphago {
 	               if (PlayBoard.playBoard[i][j] == Main.UserC) {
 	                  myCount++;
 	                  if (myCount == 4) { // 양끝 뚫려있으면 양끝에 가중치
+	                	  if (j - 4 < 0 && PlayBoard.playBoard[i][j + 1] == 0) {
+								superWeight[i][j + 1] += 40;
+								add++;
+							}
 
-	                	  System.out.println("가중치부여됨");
-	                     if (PlayBoard.playBoard[i][j - 4] == 0 && PlayBoard.playBoard[i][j + 1] == 0) {
+							else if (j + 1 > 18 && PlayBoard.playBoard[i][j - 4] == 0) {
+								superWeight[i][j - 4] += 40;
+								add++;
+							}
+							else if (PlayBoard.playBoard[i][j - 4] == 0 && PlayBoard.playBoard[i][j + 1] == 0) {
 	                    	 superWeight[i][j - 4] += 40; add++;
 	                    	 superWeight[i][j + 1] += 40; add++;
 	                     } // 한쪽만 뚫려있으면
@@ -1474,7 +1566,16 @@ class alphago {
 	                  myCount++;
 	                  if (myCount == 5) {
 	                     // 양쪽 다 비었으면 양쪽 시급하게 막고
-	                     if (PlayBoard.playBoard[i - 5][j] == 0 && PlayBoard.playBoard[i + 1][j] == 0) {
+	                	  if (i - 5 < 0 && PlayBoard.playBoard[i + 1][j] == 0) {
+								superWeight[i + 1][j] += 40;
+								add++;
+							}
+
+							else if (i + 1 > 18 && PlayBoard.playBoard[i - 5][j] == 0) {
+								superWeight[i - 5][j] += 40;
+								add++;
+							}
+							else if (PlayBoard.playBoard[i - 5][j] == 0 && PlayBoard.playBoard[i + 1][j] == 0) {
 	                    	 superWeight[i - 5][j] += 40; add++;
 	                    	 superWeight[i + 1][j] += 40; add++;
 	                     }
@@ -1500,9 +1601,16 @@ class alphago {
 	               if (PlayBoard.playBoard[i][j] == Main.UserC) {
 	                  myCount++;
 	                  if (myCount == 4) { // 양끝 뚫려있으면 양끝에 가중치
+	                	  if (i - 4 < 0 && PlayBoard.playBoard[i + 1][j] == 0) {
+								superWeight[i + 1][j] += 40;
+								add++;
+							}
 
-	                	  System.out.println("가중치부여됨");
-	                     if (PlayBoard.playBoard[i - 4][j] == 0 && PlayBoard.playBoard[i + 1][j] == 0) {
+							else if (i + 1 > 18 && PlayBoard.playBoard[i - 4][j] == 0) {
+								superWeight[i - 4][j] += 40;
+								add++;
+							}
+							else if (PlayBoard.playBoard[i - 4][j] == 0 && PlayBoard.playBoard[i + 1][j] == 0) {
 	                    	 superWeight[i - 4][j] += 40; add++;
 	                    	 superWeight[i + 1][j] += 40; add++;
 	                     } // 한쪽만 뚫려있으면
@@ -1631,7 +1739,15 @@ class alphago {
 	  	               myCount++;
 	  	                  if (myCount == 5) {
 	  	                	  //둘다뚫림 
-	  	                     if (PlayBoard.playBoard[temp1 - 5][temp2 - 5] == 0
+	  	                	if((temp1 - 5 < 0 || temp2 - 5 < 0) && PlayBoard.playBoard[temp1 + 1][temp2 + 1] == 0) {
+								superWeight[temp1 + 1][temp2 + 1] += 40;
+								add++;
+							}
+							else if((temp1 + 1 > 18 || temp2 + 1 > 18) && PlayBoard.playBoard[temp1 - 5][temp2 - 5] == 0){
+								superWeight[temp1 - 5][temp2 - 5] += 40;
+								add++;
+							}
+							else if (PlayBoard.playBoard[temp1 - 5][temp2 - 5] == 0
 	  	                           && PlayBoard.playBoard[temp1 + 1][temp2 + 1] == 0) {
 	  	                    	superWeight[temp1 - 5][temp2 - 5] += 40; add++;
 	  	                    	superWeight[temp1 + 1][temp2 + 1] += 40; add++;
@@ -1668,7 +1784,15 @@ class alphago {
 	            if (PlayBoard.playBoard[temp1][temp2] == Main.UserC) {
 	               myCount++;
 	                  if (myCount == 4) {
-	                     if (PlayBoard.playBoard[temp1 - 4][temp2 - 4] == 0
+	                	  if((temp1 - 4 < 0 || temp2 - 4 < 0) && PlayBoard.playBoard[temp1 + 1][temp2 + 1] == 0) {
+								superWeight[temp1 + 1][temp2 + 1] += 40;
+								add++;
+							}
+							else if((temp1 + 1 > 18 || temp2 + 1 > 18) && PlayBoard.playBoard[temp1 - 4][temp2 - 4] == 0){
+								superWeight[temp1 - 4][temp2 - 4] += 40;
+								add++;
+							}
+							else if (PlayBoard.playBoard[temp1 - 4][temp2 - 4] == 0
 	                           && PlayBoard.playBoard[temp1 + 1][temp2 + 1] == 0) {
 	                    	 superWeight[temp1 - 4][temp2 - 4] += 40; add++;
 	                    	 superWeight[temp1 + 1][temp2 + 1] += 40; add++;
@@ -1806,7 +1930,15 @@ class alphago {
 	            if (PlayBoard.playBoard[temp1][temp2] == Main.UserC) {
 	               myCount++;
 	                  if (myCount == 5) {
-	                     if (PlayBoard.playBoard[temp1 + 5][temp2 - 5] == 0
+	                	  if((temp1 - 1 < 0 || temp2 + 1 > 18) && PlayBoard.playBoard[temp1 + 5][temp2 - 5] == 0) {
+								superWeight[temp1 + 5][temp2 - 5] += 40;
+								add++;
+							}
+							else if((temp1 + 5 > 18 || temp2 - 5 < 0) && PlayBoard.playBoard[temp1 - 1][temp2 + 1] == 0){
+								superWeight[temp1 - 1][temp2 + 1] += 40;
+								add++;
+							}
+							else if (PlayBoard.playBoard[temp1 + 5][temp2 - 5] == 0
 	                           && PlayBoard.playBoard[temp1 - 1][temp2 + 1] == 0) {
 	                    	 superWeight[temp1 + 5][temp2 - 5] += 40; add++;
 	                    	 superWeight[temp1 - 1][temp2 + 1] += 40; add++;
@@ -1841,7 +1973,15 @@ class alphago {
 	            if (PlayBoard.playBoard[temp1][temp2] == Main.UserC) {
 	               myCount++;
 	                  if (myCount == 4) {
-	                     if (PlayBoard.playBoard[temp1 + 4][temp2 - 4] == 0
+	                	  if((temp1 - 1 < 0 || temp2 + 1 > 18) && PlayBoard.playBoard[temp1 + 4][temp2 - 4] == 0) {
+								superWeight[temp1 + 4][temp2 - 4] += 40;
+								add++;
+							}
+							else if((temp1 + 4 > 18 || temp2 - 4 < 0) && PlayBoard.playBoard[temp1 - 1][temp2 + 1] == 0){
+								superWeight[temp1 - 1][temp2 + 1] += 40;
+								add++;
+							}
+							else if (PlayBoard.playBoard[temp1 + 4][temp2 - 4] == 0
 	                           && PlayBoard.playBoard[temp1 - 1][temp2 + 1] == 0) {
 	                    	 superWeight[temp1 + 4][temp2 - 4] += 40; add++;
 	                    	 superWeight[temp1 - 1][temp2 + 1] += 40; add++;
