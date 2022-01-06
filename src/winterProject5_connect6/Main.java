@@ -1307,7 +1307,7 @@ class alphago {
 		   
    
 
-	      //// 안놓으면 질 때
+	      //// 안놓으면 질 때, 한방방어 
 	      //// ----------------------------------------------------------------------------------
 	      
 	      if(add >= 2) return;
@@ -1345,24 +1345,32 @@ class alphago {
 	               if (PlayBoard.playBoard[i][j] == Main.UserC) {
 	                  myCount++;
 	                  if (myCount == 4) { // 양끝 뚫려있으면 양끝에 가중치
+
+	                	  System.out.println("가중치부여됨");
 	                     if (PlayBoard.playBoard[i][j - 4] == 0 && PlayBoard.playBoard[i][j + 1] == 0) {
 	                    	 superWeight[i][j - 4] += 40; add++;
 	                    	 superWeight[i][j + 1] += 40; add++;
 	                     } // 한쪽만 뚫려있으면
-	                     else if (PlayBoard.playBoard[i][j - 4] == 0 || PlayBoard.playBoard[i][j + 1] == 0) {
-	                        if (PlayBoard.playBoard[i][j - 4] == 0 && PlayBoard.playBoard[i][j - 5] == 0) {
+	                     else if (PlayBoard.playBoard[i][j - 4] == 0) {
+	                        if (PlayBoard.playBoard[i][j - 5] == 0) { //한쪽이 더 뚫려있으면 둘중 이득인곳에 두고 
 	                        	if(weight[i][j - 4]>weight[i][j - 5] ) {
 	                        		superWeight[i][j - 4] += 40; add++;
 	                        	}else{
 	                        		superWeight[i][j - 5] += 40; add++;
 	                        	}
-	                        } else if (PlayBoard.playBoard[i][j + 1] == 0 && PlayBoard.playBoard[i][j + 2] == 0) {
-	                        	if(weight[i][j + 2]>weight[i][j + 1]) {
-	                        		superWeight[i][j + 2] += 40; add++;
-	                        	}else{
-	                        		superWeight[i][j + 1] += 40; add++;
-	                        	}
+	                        }else { //아니면 거따두고 
+	                        	superWeight[i][j - 4] += 40; add++;
 	                        }
+	                     }else if(PlayBoard.playBoard[i][j + 1] == 0) {
+	                    	 if (PlayBoard.playBoard[i][j + 2] == 0) {
+		                        	if(weight[i][j + 2]>weight[i][j + 1]) {
+		                        		superWeight[i][j + 2] += 40; add++;
+		                        	}else{
+		                        		superWeight[i][j + 1] += 40; add++;
+		                        	}
+		                      }else {
+		                    	  superWeight[i][j + 1] += 40; add++;
+		                      }
 	                     }
 	                  }
 	               } else myCount = 0;
@@ -1482,7 +1490,7 @@ class alphago {
 	         }
 	      }
 
-
+	      
 	      if(add >= 2) return;
 	      // 4 가로 방어
 	      for (int j = 0; j < 19; j++) {
@@ -1491,24 +1499,33 @@ class alphago {
 	            try {
 	               if (PlayBoard.playBoard[i][j] == Main.UserC) {
 	                  myCount++;
-	                  if (myCount == 4) {
+	                  if (myCount == 4) { // 양끝 뚫려있으면 양끝에 가중치
+
+	                	  System.out.println("가중치부여됨");
 	                     if (PlayBoard.playBoard[i - 4][j] == 0 && PlayBoard.playBoard[i + 1][j] == 0) {
 	                    	 superWeight[i - 4][j] += 40; add++;
 	                    	 superWeight[i + 1][j] += 40; add++;
-	                     } else if (PlayBoard.playBoard[i - 4][j] == 0 || PlayBoard.playBoard[i + 1][j] == 0) {
-	                        if (PlayBoard.playBoard[i - 4][j] == 0 && PlayBoard.playBoard[i - 5][j] == 0) {
-	                        	if(weight[i - 4][j] > weight[i - 5][j]) {
+	                     } // 한쪽만 뚫려있으면
+	                     else if (PlayBoard.playBoard[i - 4][j] == 0) {
+	                        if (PlayBoard.playBoard[i - 5][j] == 0) { //한쪽이 더 뚫려있으면 둘중 이득인곳에 두고 
+	                        	if(weight[i - 4][j]>weight[i - 5][j] ) {
 	                        		superWeight[i - 4][j] += 40; add++;
 	                        	}else{
 	                        		superWeight[i - 5][j] += 40; add++;
 	                        	}
-	                        } else if (PlayBoard.playBoard[i + 1][j] == 0 && PlayBoard.playBoard[i + 2][j] == 0) {
-	                        	if(weight[i + 2][j] >weight[i + 1][j]) {
-	                        		superWeight[i + 2][j] += 40; add++;
-	                        	}else{
-	                        		superWeight[i + 1][j] += 40; add++;
-	                        	}
+	                        }else { //아니면 거따두고 
+	                        	superWeight[i - 4][j] += 40; add++;
 	                        }
+	                     }else if(PlayBoard.playBoard[i + 1][j] == 0) {
+	                    	 if (PlayBoard.playBoard[i + 2][j] == 0) {
+		                        	if(weight[i + 2][j]>weight[i + 1][j]) {
+		                        		superWeight[i + 2][j] += 40; add++;
+		                        	}else{
+		                        		superWeight[i+ 1][j ] += 40; add++;
+		                        	}
+		                      }else {
+		                    	  superWeight[i + 1][j] += 40; add++;
+		                      }
 	                     }
 	                  }
 	               } else myCount = 0;
